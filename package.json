@@ -1,0 +1,14 @@
+{
+  "name": "api.digi-bedrijf.nl",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/main.mjs",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
