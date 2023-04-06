@@ -4,13 +4,14 @@ import helmet from 'helmet'
 import compression from 'compression'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
-import mongoose from 'mongoose';
-import morgan from 'morgan'
+import mongoose from 'mongoose'
 
-const PORT=process.env.API_PORT || 8092
-const DATABASE_CONNECTION_STRING=process.env.API_DB_CONN
+import log from './utils/logger.utils.mjs'
 
-const app = express();
+const PORT = process.env.API_PORT || 8092
+const DATABASE_CONNECTION_STRING = process.env.API_DB_CONN
+
+const app = express()
 
 // Helmet helps you secure your Express apps by setting various HTTP headers.
 app.use(helmet())
@@ -28,11 +29,7 @@ app.use(bodyParser.json())
 app.use(cookieParser())
 
 // connect to mongodb database
-connectToDatabase().catch(err => console.log(err));
-
-
-// add morgan logger for dev
-app.use(morgan())
+connectToDatabase().catch((err) => console.log(err))
 
 // custom 404
 app.use((req, res, next) => {
@@ -41,19 +38,18 @@ app.use((req, res, next) => {
 
 // custom error handler
 app.use((err, req, res, next) => {
-  console.error(err.stack)
+  log.error(err.stack)
   res.status(500).send('Something broke!')
 })
 
 const server = app.listen(PORT, () => {
-  console.log(`HTTP Server started on ${PORT}`)
+  log.info(`HTTP Server started on ${PORT}`)
 })
 
 process.on('SIGTERM', () => {
-  server.close(() => {
-  })
+  server.close(() => {})
 })
 
 async function connectToDatabase() {
-  await mongoose.connect(DATABASE_CONNECTION_STRING);
+  await mongoose.connect(DATABASE_CONNECTION_STRING)
 }
